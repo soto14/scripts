@@ -6,24 +6,27 @@ import os, sys
 # it contains wrapped in SOAP Envelopes.
 # usage: soapMessageCreator.py <inputdir> <outputdir>
 # where inputdir is the directory containing the XML files to process
-# and outputdir is the directory to store the new XML files with the SOAP
+# outputdir is the directory to store the new XML files with the SOAP
+# and extensionToExclue are file extensions to not process
 # Envelopes
 
 #check the number of arguments, maybe switch to use getopt module?
-if not(len(sys.argv) == 3):
-    print("usage: soapMessageCreator.py <inputdir> <outputdir>" )
+if not(len(sys.argv) == 4):
+    print("usage: soapMessageCreator.py <inputdir> <outputdir> <extensionToExclude>" )
     sys.exit(2)
     
 #Get the input directory. The first element in sys.argv is the script name, so get the second.
 inputDir = sys.argv[1]
 soapDir = sys.argv[2]
+ignore = sys.argv[3]
+
 if not(os.path.isdir(soapDir)):
     os.mkdir(soapDir)
 
 print "Processing: " + inputDir
 for file in os.listdir(inputDir):
-    if not(os.path.isdir(file)):
-        filePath = inputDir + os.sep + file
+    filePath = inputDir + os.sep + file
+    if not(os.path.isdir(filePath)) and not(filePath.endswith(ignore)):
         soapFilePath = soapDir + os.sep + "soap_" + file
         print "Converting: " + filePath
         #open the pd file for reading
